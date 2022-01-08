@@ -208,7 +208,9 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec4 background_color = { 0.0, 0.0, 0.0, 1.0 };
 		QRenderClearScreen(background_color);
 
-		vec3 world_pos = { 0., 0., 0. };
+		vec3 main_pos = { 0., 0., 0. };
+		vec3 light_pos = { 1., 1., 1. };
+
 		vec3 rotation = { 1.0f, 0.3f, 0.5f };
 		vec3 scale = { .1, .1, .1 };
 		float angle = 20.0f;
@@ -217,14 +219,11 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec3 lightColor = { 1.0f, 1.0f, 1.0f };
 		QShaderSetUniformVec3(phong_shader_program, "objectColor", objectColor);
 		QShaderSetUniformVec3(phong_shader_program, "lightColor", lightColor);
+		QShaderSetUniformVec3(phong_shader_program, "lightPos", light_pos);
 
-		QRenderModelObject(&main_model, &cam_obj, phong_shader_program, texture_id, world_pos, NULL, NULL, 0);
+		QRenderModelObject(&main_model, &cam_obj, phong_shader_program, texture_id, main_pos, NULL, NULL, 0);
 
-		world_pos[0] = 1.;
-		world_pos[1] = 1.;
-		world_pos[2] = 1.;
-
-		QRenderModelObject(&light_model, &cam_obj, light_shader_program, texture_id, world_pos, scale, NULL, 0);
+		QRenderModelObject(&light_model, &cam_obj, light_shader_program, texture_id, light_pos, scale, NULL, 0);
 
 		QRenderUpdateFrameContext(&frame_ctx);
 
