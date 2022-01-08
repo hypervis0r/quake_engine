@@ -119,3 +119,16 @@ Q_STATUS QShaderSetUniformVec3(GLuint program_id, const char* name, const vec3 i
 
 	return Q_SUCCESS;
 }
+
+Q_STATUS QShaderSetUniformFloat(GLuint program_id, const char* name, const float in)
+{
+	glUseProgram(program_id);
+
+	int loc = glGetUniformLocation(program_id, name);
+	if (loc == -1)
+		return Q_SHADER_UNIFORM_NONEXIST;
+
+	glUniform1f(loc, in);
+
+	return Q_SUCCESS;
+}

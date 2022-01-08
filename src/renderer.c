@@ -218,11 +218,26 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec3 scale = { .1, .1, .1 };
 		float angle = 20.0f;
 
-		vec3 objectColor = { 1.0f, 0.5f, 0.31f };
-		vec3 lightColor = { 1.0f, 1.0f, 1.0f };
-		QShaderSetUniformVec3(phong_shader_program, "objectColor", objectColor);
-		QShaderSetUniformVec3(phong_shader_program, "lightColor", lightColor);
-		QShaderSetUniformVec3(phong_shader_program, "lightPos", light_pos);
+		vec3 mat_ambient = { 1.0f, 0.5f, 0.31f };
+		vec3 mat_diffuse = { 1.0f, 0.5f, 0.31f };
+		vec3 mat_specular = { 1.0f, 0.5f, 0.31f };
+		float mat_shiny = 32.0f;
+
+		QShaderSetUniformVec3(phong_shader_program, "material.ambient", mat_ambient);
+		QShaderSetUniformVec3(phong_shader_program, "material.diffuse", mat_diffuse);
+		QShaderSetUniformVec3(phong_shader_program, "material.specular", mat_specular);
+		QShaderSetUniformFloat(phong_shader_program, "material.shininess", mat_shiny);
+
+		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
+		vec3 light_diffuse = { 0.5f, 0.5f, 0.5f };
+		vec3 light_specular = { 1.0f, 1.0f, 1.0f };
+
+		QShaderSetUniformVec3(phong_shader_program, "light.position", light_pos);
+		QShaderSetUniformVec3(phong_shader_program, "light.diffuse", light_diffuse);
+		QShaderSetUniformVec3(phong_shader_program, "light.ambient", light_ambient);
+		QShaderSetUniformVec3(phong_shader_program, "light.specular", light_specular);
+	
+		QShaderSetUniformVec3(phong_shader_program, "viewPos", cam_obj.pos);
 
 		QRenderModelObject(&main_model, &cam_obj, phong_shader_program, texture_id, main_pos, NULL, NULL, 0);
 

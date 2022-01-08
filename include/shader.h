@@ -17,3 +17,4 @@ Q_STATUS QShaderLink(GLuint* program_id, const GLuint* shader_id_array, uint32_t
 
 Q_STATUS QShaderSetUniformMat4(GLuint program_id, const char* name, const mat4 in);
 Q_STATUS QShaderSetUniformVec3(GLuint program_id, const char* name, const vec3 in);
+Q_STATUS QShaderSetUniformFloat(GLuint program_id, const char* name, const float in);
