@@ -208,8 +208,11 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec4 background_color = { 0.0, 0.0, 0.0, 1.0 };
 		QRenderClearScreen(background_color);
 
+		float xpos = 2.0f * sin(glfwGetTime());
+		float zpos = 1.5f * cos(glfwGetTime());
+
 		vec3 main_pos = { 0., 0., 0. };
-		vec3 light_pos = { 1., 1., 1. };
+		vec3 light_pos = { xpos, 1., zpos };
 
 		vec3 rotation = { 1.0f, 0.3f, 0.5f };
 		vec3 scale = { .1, .1, .1 };
