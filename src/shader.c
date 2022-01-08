@@ -106,3 +106,16 @@ Q_STATUS QShaderSetUniformMat4(GLuint program_id, const char* name, const mat4 i
 
 	return Q_SUCCESS;
 }
+
+Q_STATUS QShaderSetUniformVec3(GLuint program_id, const char* name, const vec3 in)
+{
+	glUseProgram(program_id);
+
+	int loc = glGetUniformLocation(program_id, name);
+	if (loc == -1)
+		return Q_SHADER_UNIFORM_NONEXIST;
+
+	glUniform3fv(loc, 1, in);
+
+	return Q_SUCCESS;
+}

@@ -108,7 +108,8 @@
     <ClInclude Include="include\window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\fragment.frag.glsl" />
+    <None Include="resources\shaders\light.frag.glsl" />
+    <None Include="resources\shaders\phong.frag.glsl" />
     <None Include="resources\shaders\vertex.vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

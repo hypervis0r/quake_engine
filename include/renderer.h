@@ -50,13 +50,16 @@ Q_STATUS QRenderMeshObject(
 	GLuint shader_program_id,
 	GLuint texture_id,
 	vec3 world_pos,
+	vec3 scale,
 	vec3 rotation_axis, float angle);
 Q_STATUS QRenderModelObject(
 	struct Q_MODELOBJECT* model,
 	struct Q_CAMERAOBJECT* cam,
 	GLuint shader_program_id,
 	GLuint texture_id,
-	vec3 world_pos, vec3 rot_axis, float rot_angle);
+	vec3 world_pos,
+	vec3 scale,
+	vec3 rot_axis, float rot_angle);
 
 Q_STATUS QRenderInitializeCameraObject(
 	struct Q_CAMERAOBJECT* cam,

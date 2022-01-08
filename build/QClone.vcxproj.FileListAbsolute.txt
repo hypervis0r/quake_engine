@@ -1,0 +1,8 @@
+C:\Users\atom0\Documents\DevShit\QClone\bin\assimp-vc143-mtd.dll
+C:\Users\atom0\Documents\DevShit\QClone\bin\Irrlicht.dll
+C:\Users\atom0\Documents\DevShit\QClone\bin\libpng16d.dll
+C:\Users\atom0\Documents\DevShit\QClone\bin\zlibd1.dll
+C:\Users\atom0\Documents\DevShit\QClone\bin\jpeg62.dll
+C:\Users\atom0\Documents\DevShit\QClone\bin\bz2d.dll
+C:\Users\atom0\Documents\DevShit\QClone\bin\glfw3.dll
+C:\Users\atom0\Documents\DevShit\QClone\build\QClone.vcxproj.CopyComplete

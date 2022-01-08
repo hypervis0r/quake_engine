@@ -32,11 +32,13 @@ Q_STATUS QRenderModelObject(
 	struct Q_CAMERAOBJECT* cam, 
 	GLuint shader_program_id,
 	GLuint texture_id,
-	vec3 world_pos, vec3 rot_axis, float rot_angle)
+	vec3 world_pos, 
+	vec3 scale, 
+	vec3 rot_axis, float rot_angle)
 {
 	for (size_t i = 0; i < model->meshes_count; i++)
 	{
-		QRenderMeshObject(&model->meshes[i], cam, shader_program_id, texture_id, world_pos, rot_axis, rot_angle);
+		QRenderMeshObject(&model->meshes[i], cam, shader_program_id, texture_id, world_pos, scale, rot_axis, rot_angle);
 	}
 
 	return Q_SUCCESS;
@@ -124,7 +126,8 @@ Q_STATUS QRenderMeshObject(
 	struct Q_CAMERAOBJECT *cam, 
 	GLuint shader_program_id, 
 	GLuint texture_id,
-	vec3 world_pos, 
+	vec3 world_pos,
+	vec3 scale,
 	vec3 rotation_axis, float angle)
 {
 	mat4 projection, view, model;
@@ -134,6 +137,9 @@ Q_STATUS QRenderMeshObject(
 
 	glm_mat4_identity(model);
 	glm_translate(model, world_pos);
+
+	if (scale)
+		glm_scale(model, scale);
 	
 	if (rotation_axis)
 		glm_rotate(model, glm_rad(angle), rotation_axis);
@@ -155,22 +161,35 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	struct Q_CAMERAOBJECT cam_obj = { 0 };
 	struct Q_FRAMECONTEXT frame_ctx = { 0 };
 
-	GLuint shader_id_array[2] = { 0 };
-	GLuint shader_program_id = 0;
+	GLuint phong_shader_program = 0;
+	GLuint light_shader_program = 0;
 
-	QShaderCompile(shader_id_array, GL_VERTEX_SHADER, "resources\\shaders\\vertex.vert.glsl");
-	QShaderCompile(shader_id_array + 1, GL_FRAGMENT_SHADER, "resources\\shaders\\fragment.frag.glsl");
+	GLuint vertex_shader = 0;
+	GLuint light_shader = 0;
+	GLuint phong_shader = 0;
 
-	QShaderLink(&shader_program_id, shader_id_array, ARRAY_COUNT(shader_id_array, sizeof(shader_id_array)));
+	QShaderCompile(&vertex_shader, GL_VERTEX_SHADER, "resources\\shaders\\vertex.vert.glsl");
+	QShaderCompile(&phong_shader, GL_FRAGMENT_SHADER, "resources\\shaders\\phong.frag.glsl");
+	QShaderCompile(&light_shader, GL_FRAGMENT_SHADER, "resources\\shaders\\light.frag.glsl");
 
-	glDeleteShader(shader_id_array[0]);
-	glDeleteShader(shader_id_array[1]);
+	GLuint phong_shader_c[] = { vertex_shader, phong_shader };
+	GLuint light_shader_c[] = { vertex_shader, light_shader };
+
+	QShaderLink(&phong_shader_program, phong_shader_c, ARRAY_COUNT(phong_shader_c, sizeof(phong_shader_c)));
+	QShaderLink(&light_shader_program, light_shader_c, ARRAY_COUNT(light_shader_c, sizeof(light_shader_c)));
+
+	glDeleteShader(vertex_shader);
+	glDeleteShader(light_shader);
+	glDeleteShader(phong_shader);
 
 	GLuint texture_id = 0;
 	QTextureCreate(&texture_id, "C:\\Users\\atom0\\Pictures\\1635065320374.jpg");
 
-	struct Q_MODELOBJECT mdl = { 0 };
-	QModelLoad(&mdl, "resources\\models\\Skull.obj");
+	struct Q_MODELOBJECT main_model = { 0 };
+	QModelLoad(&main_model, "resources\\models\\monkey.obj");
+
+	struct Q_MODELOBJECT light_model = { 0 };
+	QModelLoad(&light_model, "resources\\models\\cube.obj");
 
 	vec3 cameraPos = { 0.0f, 0.0f,  3.0f };
 	vec3 cameraFront = { 0.0f, 0.0f, -1.0f };
@@ -179,8 +198,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	
 	QRenderInitializeFrameContext(&frame_ctx);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -191,13 +210,21 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 
 		vec3 world_pos = { 0., 0., 0. };
 		vec3 rotation = { 1.0f, 0.3f, 0.5f };
+		vec3 scale = { .1, .1, .1 };
 		float angle = 20.0f;
 
-		QRenderModelObject(&mdl, &cam_obj, shader_program_id, texture_id, world_pos, rotation, angle * ((float)glfwGetTime() * 0.1));
+		vec3 objectColor = { 1.0f, 0.5f, 0.31f };
+		vec3 lightColor = { 1.0f, 1.0f, 1.0f };
+		QShaderSetUniformVec3(phong_shader_program, "objectColor", objectColor);
+		QShaderSetUniformVec3(phong_shader_program, "lightColor", lightColor);
 
-		world_pos[0] = 5.;
+		QRenderModelObject(&main_model, &cam_obj, phong_shader_program, texture_id, world_pos, NULL, NULL, 0);
 
-		QRenderModelObject(&mdl, &cam_obj, shader_program_id, texture_id, world_pos, rotation, angle * ((float)glfwGetTime() * 0.1));
+		world_pos[0] = 1.;
+		world_pos[1] = 1.;
+		world_pos[2] = 1.;
+
+		QRenderModelObject(&light_model, &cam_obj, light_shader_program, texture_id, world_pos, scale, NULL, 0);
 
 		QRenderUpdateFrameContext(&frame_ctx);
 

@@ -76,7 +76,10 @@
     <None Include="resources\shaders\vertex.vert.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="resources\shaders\fragment.frag.glsl">
+    <None Include="resources\shaders\phong.frag.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="resources\shaders\light.frag.glsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>
