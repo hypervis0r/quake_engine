@@ -33,13 +33,16 @@
     <ClCompile Include="src\input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\shader.c">
+    <ClCompile Include="src\shader\shader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\texture.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\model.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader\material.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,13 +65,16 @@
     <ClInclude Include="include\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\shader.h">
+    <ClInclude Include="include\shader\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shader\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

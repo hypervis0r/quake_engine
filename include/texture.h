@@ -8,6 +8,6 @@
 
 #include "common.h"
 #include "input.h"
-#include "shader.h"
+#include "shader/shader.h"
 
 Q_STATUS QTextureCreate(GLuint *texture_id, const char* path);

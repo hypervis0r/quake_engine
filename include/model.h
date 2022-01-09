@@ -11,7 +11,7 @@
 
 #include "common.h"
 #include "input.h"
-#include "shader.h"
+#include "shader/shader.h"
 #include "texture.h"
 #include "log.h"
 

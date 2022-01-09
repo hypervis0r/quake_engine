@@ -145,3 +145,8 @@ Q_STATUS QShaderSetUniformInt(GLuint program_id, const char* name, const int in)
 
 	return Q_SUCCESS;
 }
+
+Q_STATUS QShaderSetUniformBool(GLuint program_id, const char* name, const GLboolean in)
+{
+	return QShaderSetUniformInt(program_id, name, in);
+}

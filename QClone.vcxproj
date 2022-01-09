@@ -92,7 +92,8 @@
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\model.c" />
     <ClCompile Include="src\renderer.c" />
-    <ClCompile Include="src\shader.c" />
+    <ClCompile Include="src\shader\material.c" />
+    <ClCompile Include="src\shader\shader.c" />
     <ClCompile Include="src\texture.c" />
     <ClCompile Include="src\window.c" />
   </ItemGroup>
@@ -103,7 +104,8 @@
     <ClInclude Include="include\main.h" />
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\renderer.h" />
-    <ClInclude Include="include\shader.h" />
+    <ClInclude Include="include\shader\material.h" />
+    <ClInclude Include="include\shader\shader.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\window.h" />
   </ItemGroup>

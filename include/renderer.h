@@ -8,7 +8,8 @@
 
 #include "common.h"
 #include "input.h"
-#include "shader.h"
+#include "shader/shader.h"
+#include "shader/material.h"
 #include "texture.h"
 #include "model.h"
 
@@ -47,16 +48,14 @@ struct Q_FRAMECONTEXT
 Q_STATUS QRenderMeshObject(
 	struct Q_MESHOBJECT* mesh,
 	struct Q_CAMERAOBJECT* cam,
-	GLuint shader_program_id,
-	GLuint texture_id,
+	struct Q_PHONGMATERIAL* mat,
 	vec3 world_pos,
 	vec3 scale,
 	vec3 rotation_axis, float angle);
 Q_STATUS QRenderModelObject(
 	struct Q_MODELOBJECT* model,
 	struct Q_CAMERAOBJECT* cam,
-	GLuint shader_program_id,
-	GLuint texture_id,
+	struct Q_PHONGMATERIAL* mat,
 	vec3 world_pos,
 	vec3 scale,
 	vec3 rot_axis, float rot_angle);
