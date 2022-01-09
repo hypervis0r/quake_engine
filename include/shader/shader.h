@@ -19,3 +19,4 @@ Q_STATUS QShaderSetUniformMat4(GLuint program_id, const char* name, const mat4 i
 Q_STATUS QShaderSetUniformVec3(GLuint program_id, const char* name, const vec3 in);
 Q_STATUS QShaderSetUniformFloat(GLuint program_id, const char* name, const float in);
 Q_STATUS QShaderSetUniformInt(GLuint program_id, const char* name, const int in);
+Q_STATUS QShaderSetUniformBool(GLuint program_id, const char* name, const GLboolean in);

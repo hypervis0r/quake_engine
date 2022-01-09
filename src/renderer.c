@@ -7,9 +7,9 @@ Q_STATUS QRenderDrawMeshObject(struct Q_MESHOBJECT* vertex_obj)
 	return Q_SUCCESS;
 }
 
-Q_STATUS QRenderBindMeshObject(struct Q_MESHOBJECT* vertex_obj, struct Q_PHONGMATERIAL* mat)
+Q_STATUS QRenderBindMeshObject(struct Q_MESHOBJECT* vertex_obj, struct Q_MATERIAL* mat)
 {
-	if (!vertex_obj)
+	if (!vertex_obj || !mat)
 		return Q_ERROR;
 
 	glUseProgram(mat->shader_program_id);
@@ -19,17 +19,8 @@ Q_STATUS QRenderBindMeshObject(struct Q_MESHOBJECT* vertex_obj, struct Q_PHONGMA
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_obj->vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_obj->ebo);
 
-	if (mat->diffuse_texture_id != -1)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mat->diffuse_texture_id);
-	}
-
-	if (mat->specular_texture_id != -1)
-	{
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, mat->specular_texture_id);
-	}
+	if (mat->bind_textures)
+		mat->bind_textures(mat);
 
 	for (GLuint i = 0; i < ARRAY_COUNT(vertex_obj->attrib_order, vertex_obj->attrib_size); i++)
 		glEnableVertexAttribArray(i);
@@ -40,7 +31,7 @@ Q_STATUS QRenderBindMeshObject(struct Q_MESHOBJECT* vertex_obj, struct Q_PHONGMA
 Q_STATUS QRenderModelObject(
 	struct Q_MODELOBJECT* model, 
 	struct Q_CAMERAOBJECT* cam, 
-	struct Q_PHONGMATERIAL* mat,
+	struct Q_MATERIAL* mat,
 	vec3 world_pos, 
 	vec3 scale, 
 	vec3 rot_axis, float rot_angle)
@@ -133,7 +124,7 @@ Q_STATUS QRenderClearScreen(vec4 color)
 Q_STATUS QRenderMeshObject(
 	struct Q_MESHOBJECT *mesh, 
 	struct Q_CAMERAOBJECT *cam, 
-	struct Q_PHONGMATERIAL *mat,
+	struct Q_MATERIAL *mat,
 	vec3 world_pos,
 	vec3 scale,
 	vec3 rotation_axis, float angle)
@@ -187,12 +178,12 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	GLuint texture_id = 0;
 	QTextureCreate(&texture_id, "resources\\textures\\crate1.png");
 
-	struct Q_PHONGMATERIAL mat = { 0 };
+	struct Q_MATERIAL mat = { 0 };
 	QShaderPhongCreate(&mat, texture_id, NULL, texture_id, NULL, 32.0f);
 
-	struct Q_PHONGMATERIAL light_mat = { 0 };
+	struct Q_MATERIAL light_mat = { 0 };
 	vec3 albedo = { 1., 1., 1. };
-	QShaderPhongCreate(&light_mat, -1, albedo, -1, albedo, 1.);
+	QShaderFillCreate(&light_mat, albedo);
 
 	struct Q_MODELOBJECT main_model = { 0 };
 	QModelLoad(&main_model, "resources\\models\\cube.obj");
@@ -230,11 +221,16 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
 		vec3 light_diffuse = { 0.5f, 0.5f, 0.5f };
 		vec3 light_specular = { 1.0f, 1.0f, 1.0f };
-		QShaderPhongSetLight(&mat, &cam_obj, light_ambient, light_diffuse, light_specular, light_pos);
-		QShaderPhongSetLight(&light_mat, &cam_obj, light_ambient, light_diffuse, light_specular, main_pos);
+		struct Q_LIGHTOBJECT light_obj = { 0 };
+		QShaderCreateLight(&light_obj, light_ambient, light_diffuse, light_specular, light_pos);
 
-		QShaderPhongApplyUniforms(&mat);
-		QShaderPhongApplyUniforms(&light_mat);
+		struct Q_LIGHTOBJECT light_obj_2 = { 0 };
+		QShaderCreateLight(&light_obj_2, light_ambient, light_diffuse, light_specular, main_pos);
+
+		mat.set_shader_light(&mat, &light_obj, &cam_obj);
+
+		mat.apply_shader_uniforms(&mat);
+		light_mat.apply_shader_uniforms(&light_mat);
 
 		QRenderModelObject(&main_model, &cam_obj, &mat, main_pos, NULL, NULL, 0);
 

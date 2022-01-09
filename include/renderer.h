@@ -12,6 +12,8 @@
 #include "shader/material.h"
 #include "texture.h"
 #include "model.h"
+#include "shader/phong.h"
+#include "shader/fill.h"
 
 /*
 	Struct to hold camera values

@@ -9,8 +9,9 @@
 #include "common.h"
 #include "log.h"
 #include "renderer.h"
+#include "shader/shader.h"
 
-struct Q_PHONGLIGHT
+struct Q_LIGHTOBJECT
 {
 	vec3 position;
 	vec3 view_pos;
@@ -20,27 +21,21 @@ struct Q_PHONGLIGHT
 	vec3 specular;
 };
 
-struct Q_PHONGMATERIAL
+struct Q_MATERIAL
 {
 	GLuint shader_program_id;
 
-	GLuint diffuse_texture_id;
-	vec3 diffuse_albedo;
-	GLuint specular_texture_id;
-	vec3 specular_albedo;
-	float shininess;
+	Q_STATUS(*apply_shader_uniforms)(struct Q_MATERIAL* this);
+	Q_STATUS(*set_shader_light)(
+		struct Q_MATERIAL* this, 
+		struct Q_LIGHTOBJECT* light, 
+		struct Q_CAMERAOBJECT *cam);
+	Q_STATUS(*bind_textures)(struct Q_MATERIAL* this);
 
-	struct Q_PHONGLIGHT light;
+	void* material_data;
+	size_t material_size;
 };
 
-Q_STATUS QShaderPhongSetLight(
-	struct Q_PHONGMATERIAL* mat,
-	struct Q_CAMERAOBJECT* cam,
-	vec3 ambient, vec3 diffuse, vec3 specular,
-	vec3 position);
-Q_STATUS QShaderPhongApplyUniforms(struct Q_PHONGMATERIAL* mat);
-Q_STATUS QShaderPhongCreate(
-	struct Q_PHONGMATERIAL* mat,
-	GLuint diffuse_texture, vec3 diffuse_albedo,
-	GLuint specular_texture, vec3 specular_albedo,
-	float shininess);
+Q_STATUS QShaderCreateLight(
+	struct Q_LIGHTOBJECT* light,
+	vec3 ambient, vec3 diffuse, vec3 specular, vec3 position);

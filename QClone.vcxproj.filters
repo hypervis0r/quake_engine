@@ -45,6 +45,12 @@
     <ClCompile Include="src\shader\material.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\shader\phong.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader\fill.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\main.h">
@@ -77,6 +83,12 @@
     <ClInclude Include="include\shader\material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\shader\phong.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shader\fill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\vertex.vert.glsl">
@@ -85,7 +97,7 @@
     <None Include="resources\shaders\phong.frag.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="resources\shaders\light.frag.glsl">
+    <None Include="resources\shaders\fill.frag.glsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>
