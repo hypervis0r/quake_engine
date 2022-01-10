@@ -22,6 +22,9 @@ Q_STATUS QRenderBindMeshObject(struct Q_MESHOBJECT* vertex_obj, struct Q_MATERIA
 	if (mat->bind_textures)
 		mat->bind_textures(mat);
 
+	if (mat->apply_shader_uniforms)
+		mat->apply_shader_uniforms(mat);
+
 	for (GLuint i = 0; i < ARRAY_COUNT(vertex_obj->attrib_order, vertex_obj->attrib_size); i++)
 		glEnableVertexAttribArray(i);
 
@@ -129,7 +132,7 @@ Q_STATUS QRenderMeshObject(
 	vec3 scale,
 	vec3 rotation_axis, float angle)
 {
-	mat4 projection, view, model;
+	mat4 projection, view, model, normal_matrix;
 
 	QRenderCalculateViewMatrix(cam, view);
 	QRenderCalculateProjectionMatrix(cam, projection);
@@ -143,11 +146,15 @@ Q_STATUS QRenderMeshObject(
 	if (rotation_axis)
 		glm_rotate(model, glm_rad(angle), rotation_axis);
 
+	glm_mat4_inv(model, normal_matrix);
+	glm_mat4_transpose(normal_matrix);
+
 	QRenderBindMeshObject(mesh, mat);
 
 	QShaderSetUniformMat4(mat->shader_program_id, "view", view);
 	QShaderSetUniformMat4(mat->shader_program_id, "projection", projection);
 	QShaderSetUniformMat4(mat->shader_program_id, "model", model);
+	QShaderSetUniformMat4(mat->shader_program_id, "normal_matrix", normal_matrix);
 
 	QRenderDrawMeshObject(mesh);
 
@@ -218,10 +225,7 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 
 		mat.set_shader_light(&mat, &light_obj, &cam_obj);
 
-		mat.apply_shader_uniforms(&mat);
-		light_mat.apply_shader_uniforms(&light_mat);
-
-		QRenderModelObject(&main_model, &cam_obj, &mat, main_pos, NULL, NULL, 0);
+		QRenderModelObject(&main_model, &cam_obj, &mat, main_pos, NULL, rotation, angle * (glfwGetTime() * 0.5));
 
 		QRenderModelObject(&light_model, &cam_obj, &light_mat, light_pos, scale, NULL, 0);
 

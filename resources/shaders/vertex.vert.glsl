@@ -10,6 +10,7 @@ out vec3 oFragPos;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 normal_matrix;
 
 void main()
 {
@@ -17,5 +18,5 @@ void main()
 
     oFragPos = vec3(model * vec4(aPos, 1.0));
     oTexCoord = aTexCoord;
-    oNormal = aNormal;
+    oNormal = mat3(normal_matrix) * aNormal;
 }
