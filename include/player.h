@@ -18,8 +18,11 @@ struct Q_PLAYEROBJECT
 {
 	struct Q_CAMERAOBJECT* cam;
 	float movement_speed;
+	float gravity;
+	Q_BOOL is_grounded;
 };
 
 Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player);
 
 Q_STATUS QPlayerMove(struct Q_PLAYEROBJECT* player, vec3 direction);
+Q_STATUS QPlayerUpdateGravity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx);

@@ -1,6 +1,7 @@
 #include <stdint.h>
 
-typedef uint32_t Q_STATUS;
+typedef uint32_t	Q_STATUS;
+typedef uint8_t		Q_BOOL;
 
 #define ARRAY_COUNT(arr, array_size) (array_size / sizeof(*arr))
 

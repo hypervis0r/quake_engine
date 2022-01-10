@@ -227,6 +227,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 
 		QRenderUpdateFrameContext(&frame_ctx);
 
+		QPlayerUpdateGravity(&player, &frame_ctx);
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

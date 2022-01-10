@@ -41,6 +41,11 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 
 		QPlayerMove(player, movement_direction);
 	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		glm_vec3_scale(player->cam->up, cameraSpeed, movement_direction);
+		QPlayerMove(player, movement_direction);
+	}
 
 	/*
 		If ESC pressed, close the window
