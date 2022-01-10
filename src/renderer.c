@@ -160,26 +160,14 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	struct Q_CAMERAOBJECT cam_obj = { 0 };
 	struct Q_FRAMECONTEXT frame_ctx = { 0 };
 
-	GLuint light_shader_program = 0;
-
-	GLuint vertex_shader = 0;
-	GLuint light_shader = 0;
-
-	QShaderCompile(&vertex_shader, GL_VERTEX_SHADER, "resources\\shaders\\vertex.vert.glsl");
-	QShaderCompile(&light_shader, GL_FRAGMENT_SHADER, "resources\\shaders\\light.frag.glsl");
-
-	GLuint light_shader_c[] = { vertex_shader, light_shader };
-
-	QShaderLink(&light_shader_program, light_shader_c, ARRAY_COUNT(light_shader_c, sizeof(light_shader_c)));
-
-	glDeleteShader(vertex_shader);
-	glDeleteShader(light_shader);
-
 	GLuint texture_id = 0;
 	QTextureCreate(&texture_id, "resources\\textures\\crate1.png");
 
+	GLuint specular_texture = 0;
+	QTextureCreate(&specular_texture, "resources\\textures\\crate1_specular.png");
+
 	struct Q_MATERIAL mat = { 0 };
-	QShaderPhongCreate(&mat, texture_id, NULL, texture_id, NULL, 32.0f);
+	QShaderPhongCreate(&mat, texture_id, NULL, specular_texture, NULL, 32.0f);
 
 	struct Q_MATERIAL light_mat = { 0 };
 	vec3 albedo = { 1., 1., 1. };
@@ -201,6 +189,9 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 
+	/*
+		Main render loop
+	*/
 	while (!glfwWindowShouldClose(window))
 	{
 		QInputProcess(window, &cam_obj, &frame_ctx);
@@ -219,13 +210,10 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		float angle = 20.0f;
 
 		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
-		vec3 light_diffuse = { 0.5f, 0.5f, 0.5f };
+		vec3 light_diffuse = { 1.f, 1.f, 1.f };
 		vec3 light_specular = { 1.0f, 1.0f, 1.0f };
 		struct Q_LIGHTOBJECT light_obj = { 0 };
 		QShaderCreateLight(&light_obj, light_ambient, light_diffuse, light_specular, light_pos);
-
-		struct Q_LIGHTOBJECT light_obj_2 = { 0 };
-		QShaderCreateLight(&light_obj_2, light_ambient, light_diffuse, light_specular, main_pos);
 
 		mat.set_shader_light(&mat, &light_obj, &cam_obj);
 

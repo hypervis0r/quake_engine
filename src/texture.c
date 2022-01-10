@@ -1,6 +1,5 @@
 #include "texture.h"
 
-
 Q_STATUS QTextureCreate(GLuint* texture_id, const char* path)
 {
 	if (!texture_id || !path)
