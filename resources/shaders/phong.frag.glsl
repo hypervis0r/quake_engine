@@ -5,6 +5,8 @@ struct Material {
 	vec3 diffuse_albedo;
 	sampler2D specular;
 	vec3 specular_albedo;
+	sampler2D emission;
+	vec3 emission_albedo;
 	float shininess;
 }; 
 
@@ -31,16 +33,19 @@ void main()
 {
 	vec3 diffuse_map;
 	vec3 specular_map;
+	vec3 emission_map;
 	
 	if (b_Untextured == true)
 	{
 		diffuse_map = material.diffuse_albedo;
 		specular_map = material.specular_albedo;
+		emission_map = material.emission_albedo;
 	}
 	else
 	{
 		diffuse_map = vec3(texture(material.diffuse, oTexCoord)) * material.diffuse_albedo;
 		specular_map = vec3(texture(material.specular, oTexCoord)) * material.specular_albedo;
+		emission_map = vec3(texture(material.emission, oTexCoord)) * material.emission_albedo;
 	}
 
 	// ambient
@@ -57,8 +62,8 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, norm);  
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 	vec3 specular = light.specular * (spec * specular_map);  
-		
-	vec3 result = ambient + diffuse + specular;
+
+	vec3 result = ambient + diffuse + specular + (emission_map * pow(diff, 0.5));
 	
 	FragColor = vec4(result, 1.0);
 }

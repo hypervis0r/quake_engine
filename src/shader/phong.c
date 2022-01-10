@@ -30,6 +30,12 @@ Q_STATUS QShaderPhongBindTextures(struct Q_MATERIAL* this)
 		glBindTexture(GL_TEXTURE_2D, mat->texture_map->specular_id);
 	}
 
+	if (mat->texture_map->emission_id != 0)
+	{
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, mat->texture_map->emission_id);
+	}
+
 	return Q_SUCCESS;
 }
 
@@ -39,9 +45,11 @@ Q_STATUS QShaderPhongApplyUniforms(struct Q_MATERIAL* this)
 
 	QShaderSetUniformInt(this->shader_program_id, "material.diffuse", 0);
 	QShaderSetUniformInt(this->shader_program_id, "material.specular", 1);
+	QShaderSetUniformInt(this->shader_program_id, "material.emission", 2);
 	QShaderSetUniformFloat(this->shader_program_id, "material.shininess", mat->shininess);
 	QShaderSetUniformVec3(this->shader_program_id, "material.diffuse_albedo", mat->texture_map->diffuse_albedo);
 	QShaderSetUniformVec3(this->shader_program_id, "material.specular_albedo", mat->texture_map->specular_albedo);
+	QShaderSetUniformVec3(this->shader_program_id, "material.emission_albedo", mat->texture_map->emission_albedo);
 
 	QShaderSetUniformVec3(this->shader_program_id, "light.position", mat->light->position);
 	QShaderSetUniformVec3(this->shader_program_id, "light.diffuse", mat->light->diffuse);

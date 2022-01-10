@@ -17,7 +17,7 @@ struct Q_TEXTUREMAP
 	*/
 	GLuint diffuse_id;
 	GLuint specular_id;
-	GLuint emmision_id;
+	GLuint emission_id;
 
 	/*
 		In the absence of textures, we can fall back to
@@ -25,7 +25,7 @@ struct Q_TEXTUREMAP
 	*/
 	vec3 diffuse_albedo;
 	vec3 specular_albedo;
-	vec3 emmision_albedo;
+	vec3 emission_albedo;
 };
 
 Q_STATUS QTextureCreate(GLuint *texture_id, const char* path);

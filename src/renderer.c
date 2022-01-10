@@ -162,18 +162,18 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 
 	struct Q_TEXTUREMAP map = { 0 };
 	QTextureMapCreate(&map, 
-		"resources\\textures\\crate1.png", "resources\\textures\\crate1_specular.png", NULL,
+		"resources\\textures\\crate1.png", "resources\\textures\\crate1_specular.png", "resources\\textures\\matrix.jpg",
 		NULL, NULL, NULL);
 
 	struct Q_MATERIAL mat = { 0 };
-	QShaderPhongCreate(&mat, &map, 32.0f);
+	QShaderPhongCreate(&mat, &map, 100.0f);
 
 	struct Q_MATERIAL light_mat = { 0 };
 	vec3 albedo = { 1., 1., 1. };
 	QShaderFillCreate(&light_mat, albedo);
 
 	struct Q_MODELOBJECT main_model = { 0 };
-	QModelLoad(&main_model, "resources\\models\\cube.obj");
+	QModelLoad(&main_model, "resources\\models\\skull.obj");
 
 	struct Q_MODELOBJECT light_model = { 0 };
 	QModelLoad(&light_model, "resources\\models\\cube.obj");
@@ -185,8 +185,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	
 	QRenderInitializeFrameContext(&frame_ctx);
 
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	/*
 		Main render loop
@@ -202,7 +202,7 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		float zpos = 1.5f * cos(glfwGetTime());
 
 		vec3 main_pos = { 0., 0., 0. };
-		vec3 light_pos = { xpos, 1., zpos };
+		vec3 light_pos = { xpos, 1.5, zpos };
 
 		vec3 rotation = { 1.0f, 0.3f, 0.5f };
 		vec3 scale = { .1, .1, .1 };

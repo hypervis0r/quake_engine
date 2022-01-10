@@ -31,9 +31,24 @@ Q_STATUS QTextureCreate(GLuint* texture_id, const char* path)
 	}
 
 	/*
+		Set the channel type
+		TODO: this is so fucking retarded
+	*/
+	GLint channel_type = 0;
+	switch (nrChannels)
+	{
+	case 3: 
+		channel_type = GL_RGB; break;
+	case 4: 
+		channel_type = GL_RGBA; break;
+	default: 
+		QLogWarn("Unsupported channel value in texture (%s)\n", path); return;
+	}
+
+	/*
 		Copy image into the bound texture ID
 	*/
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, channel_type, width, height, 0, channel_type, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	stbi_image_free(data);
@@ -57,7 +72,7 @@ Q_STATUS QTextureMapCreate(
 
 	map->diffuse_id = 0;
 	map->specular_id = 0;
-	map->emmision_id = 0;
+	map->emission_id = 0;
 
 	/*
 		We don't check for errors here because
@@ -68,7 +83,7 @@ Q_STATUS QTextureMapCreate(
 	if (specular_path)
 		QTextureCreate(&map->specular_id, specular_path);
 	if (emmision_path)
-		QTextureCreate(&map->emmision_id, emmision_path);
+		QTextureCreate(&map->emission_id, emmision_path);
 
 	/*
 		Set color albedos.
@@ -86,9 +101,9 @@ Q_STATUS QTextureMapCreate(
 		glm_vec3_one(map->specular_albedo);
 	
 	if (emmision_albedo)
-		glm_vec3_copy(emmision_albedo, map->emmision_albedo);
+		glm_vec3_copy(emmision_albedo, map->emission_albedo);
 	else
-		glm_vec3_one(map->emmision_albedo);
+		glm_vec3_one(map->emission_albedo);
 
 	return Q_SUCCESS;
 }
