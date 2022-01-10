@@ -11,13 +11,18 @@ Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player)
 	vec3 cameraUp = { 0.0f, 1.0f, 0.0f };
 	QRenderInitializeCameraObject(player->cam, cameraPos, cameraFront, cameraUp, 90.f);
 
-	player->movement_speed = 2.5f;
+	glm_vec3_copy(cameraPos, player->pos);
+	glm_vec3_copy(cameraFront, player->front);
+	glm_vec3_copy(cameraUp, player->up);
+
+	player->movement_speed = 2.f;
 	player->gravity = 1.f;
 	player->is_grounded = TRUE;
+	player->last_jump_tick = 0.;
 
 	glm_vec3_zero(player->velocity);
 
-	glm_vec3_fill(player->friction, 0.8);
+	glm_vec3_fill(player->friction, 0.75);
 	player->friction[1] = 1.;
 
 	return Q_SUCCESS;

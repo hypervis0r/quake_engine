@@ -17,11 +17,16 @@
 struct Q_PLAYEROBJECT
 {
 	struct Q_CAMERAOBJECT* cam;
+	vec3 pos;
+	vec3 front;
+	vec3 up;
+
 	vec3 velocity;
 	vec3 friction;
 	float movement_speed;
 	float gravity;
 	Q_BOOL is_grounded;
+	double last_jump_tick;
 };
 
 Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player);

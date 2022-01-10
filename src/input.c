@@ -12,21 +12,24 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 {
 	vec3 movement_direction;
 	const float cameraSpeed = player->movement_speed * frame_ctx->delta_time; // adjust accordingly
+
+	glm_normalize(player->front);
+	
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		glm_vec3_scale(player->cam->front, cameraSpeed, movement_direction);
+		glm_vec3_scale(player->front, cameraSpeed, movement_direction);
 		glm_vec3_add(player->velocity, movement_direction, player->velocity);
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		glm_vec3_scale(player->cam->front, cameraSpeed, movement_direction);
+		glm_vec3_scale(player->front, cameraSpeed, movement_direction);
 		glm_vec3_negate(movement_direction);
 
 		glm_vec3_add(player->velocity, movement_direction, player->velocity);
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		glm_cross(player->cam->front, player->cam->up, movement_direction);
+		glm_cross(player->front, player->up, movement_direction);
 		glm_normalize(movement_direction);
 		glm_vec3_scale(movement_direction, cameraSpeed, movement_direction);
 		glm_vec3_negate(movement_direction);
@@ -35,7 +38,7 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		glm_cross(player->cam->front, player->cam->up, movement_direction);
+		glm_cross(player->front, player->up, movement_direction);
 		glm_normalize(movement_direction);
 		glm_vec3_scale(movement_direction, cameraSpeed, movement_direction);
 
@@ -43,10 +46,12 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		if (player->is_grounded)
+		if (player->is_grounded && frame_ctx->last_frame_time - player->last_jump_tick > 0.25)
 		{
-			glm_vec3_scale(player->cam->up, 20. * frame_ctx->delta_time, movement_direction);
+			glm_vec3_scale(player->up, 0.25, movement_direction);
 			glm_vec3_add(player->velocity, movement_direction, player->velocity);
+
+			player->last_jump_tick = frame_ctx->last_frame_time;
 		}
 	}
 
@@ -89,6 +94,9 @@ Q_STATUS QInputProcessMouse(GLFWwindow* window, struct Q_PLAYEROBJECT* player, s
 	glm_normalize(direction);
 
 	glm_vec3_copy(direction, player->cam->front);
+
+	player->front[0] = direction[0];
+	player->front[2] = direction[2];
 
 	return Q_SUCCESS;
 }
