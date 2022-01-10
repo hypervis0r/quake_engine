@@ -202,6 +202,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	{
 		QInputProcess(window, &player, &frame_ctx);
 
+		QPlayerUpdateVelocity(&player, &frame_ctx);
+
 		vec4 background_color = { 0.1, 0.1, 0.1, 1.0 };
 		QRenderClearScreen(background_color);
 
@@ -226,8 +228,6 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		QRenderModelObject(&light_model, player.cam, &light_mat, light_pos, scale, NULL, 0);
 
 		QRenderUpdateFrameContext(&frame_ctx);
-
-		QPlayerUpdateGravity(&player, &frame_ctx);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -15,6 +15,11 @@ Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player)
 	player->gravity = 1.f;
 	player->is_grounded = TRUE;
 
+	glm_vec3_zero(player->velocity);
+
+	glm_vec3_fill(player->friction, 0.8);
+	player->friction[1] = 1.;
+
 	return Q_SUCCESS;
 }
 
@@ -36,12 +41,14 @@ Q_STATUS QPlayerMove(struct Q_PLAYEROBJECT* player, vec3 direction)
 	return Q_SUCCESS;
 }
 
-Q_STATUS QPlayerUpdateGravity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx)
+Q_STATUS QPlayerUpdateVelocity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx)
 {
-	if (player->is_grounded)
-		return Q_SUCCESS;
+	if (player->is_grounded == FALSE)
+		player->velocity[1] -= player->gravity * frame_ctx->delta_time;
 
-	player->cam->pos[1] -= player->gravity * frame_ctx->delta_time;
+	glm_vec3_mul(player->velocity, player->friction, player->velocity);
+
+	QPlayerMove(player, player->velocity);
 
 	if (player->cam->pos[1] < 0)
 		player->cam->pos[1] = 0;

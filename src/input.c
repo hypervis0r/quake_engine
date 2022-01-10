@@ -15,14 +15,14 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		glm_vec3_scale(player->cam->front, cameraSpeed, movement_direction);
-		QPlayerMove(player, movement_direction);
+		glm_vec3_add(player->velocity, movement_direction, player->velocity);
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
 		glm_vec3_scale(player->cam->front, cameraSpeed, movement_direction);
 		glm_vec3_negate(movement_direction);
 
-		QPlayerMove(player, movement_direction);
+		glm_vec3_add(player->velocity, movement_direction, player->velocity);
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
@@ -31,7 +31,7 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 		glm_vec3_scale(movement_direction, cameraSpeed, movement_direction);
 		glm_vec3_negate(movement_direction);
 
-		QPlayerMove(player, movement_direction);
+		glm_vec3_add(player->velocity, movement_direction, player->velocity);
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
@@ -39,12 +39,15 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 		glm_normalize(movement_direction);
 		glm_vec3_scale(movement_direction, cameraSpeed, movement_direction);
 
-		QPlayerMove(player, movement_direction);
+		glm_vec3_add(player->velocity, movement_direction, player->velocity);
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		glm_vec3_scale(player->cam->up, cameraSpeed, movement_direction);
-		QPlayerMove(player, movement_direction);
+		if (player->is_grounded)
+		{
+			glm_vec3_scale(player->cam->up, 20. * frame_ctx->delta_time, movement_direction);
+			glm_vec3_add(player->velocity, movement_direction, player->velocity);
+		}
 	}
 
 	/*
