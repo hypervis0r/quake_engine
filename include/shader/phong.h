@@ -14,10 +14,7 @@
 
 struct Q_PHONGMATERIAL
 {
-	GLuint diffuse_texture_id;
-	vec3 diffuse_albedo;
-	GLuint specular_texture_id;
-	vec3 specular_albedo;
+	struct Q_TEXTUREMAP* texture_map;
 	float shininess;
 
 	struct Q_LIGHTOBJECT *light;
@@ -31,7 +28,6 @@ Q_STATUS QShaderPhongApplyUniforms(struct Q_MATERIAL* this);
 Q_STATUS QShaderPhongBindTextures(struct Q_MATERIAL* this);
 Q_STATUS QShaderPhongCreate(
 	struct Q_MATERIAL* this,
-	GLuint diffuse_texture, vec3 diffuse_albedo,
-	GLuint specular_texture, vec3 specular_albedo,
+	struct Q_TEXTUREMAP* map,
 	float shininess);
 Q_STATUS QShaderPhongFree(struct Q_MATERIAL* mat);

@@ -160,14 +160,13 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	struct Q_CAMERAOBJECT cam_obj = { 0 };
 	struct Q_FRAMECONTEXT frame_ctx = { 0 };
 
-	GLuint texture_id = 0;
-	QTextureCreate(&texture_id, "resources\\textures\\crate1.png");
-
-	GLuint specular_texture = 0;
-	QTextureCreate(&specular_texture, "resources\\textures\\crate1_specular.png");
+	struct Q_TEXTUREMAP map = { 0 };
+	QTextureMapCreate(&map, 
+		"resources\\textures\\crate1.png", "resources\\textures\\crate1_specular.png", NULL,
+		NULL, NULL, NULL);
 
 	struct Q_MATERIAL mat = { 0 };
-	QShaderPhongCreate(&mat, texture_id, NULL, specular_texture, NULL, 32.0f);
+	QShaderPhongCreate(&mat, &map, 32.0f);
 
 	struct Q_MATERIAL light_mat = { 0 };
 	vec3 albedo = { 1., 1., 1. };

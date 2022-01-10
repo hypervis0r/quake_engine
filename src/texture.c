@@ -42,3 +42,53 @@ Q_STATUS QTextureCreate(GLuint* texture_id, const char* path)
 
 	return Q_SUCCESS;
 }
+
+Q_STATUS QTextureMapCreate(
+	struct Q_TEXTUREMAP* map,
+	const char* diffuse_path,
+	const char* specular_path,
+	const char* emmision_path,
+	vec3 diffuse_albedo,
+	vec3 specular_albedo,
+	vec3 emmision_albedo)
+{
+	if (!map)
+		return Q_ERROR;
+
+	map->diffuse_id = 0;
+	map->specular_id = 0;
+	map->emmision_id = 0;
+
+	/*
+		We don't check for errors here because
+		it doesn't really matter if a texture fails to load.
+	*/
+	if (diffuse_path)
+		QTextureCreate(&map->diffuse_id, diffuse_path);
+	if (specular_path)
+		QTextureCreate(&map->specular_id, specular_path);
+	if (emmision_path)
+		QTextureCreate(&map->emmision_id, emmision_path);
+
+	/*
+		Set color albedos.
+		if the albedo wasn't specified, just set it to `1.0`s,
+		so we don't fuck up the textures
+	*/
+	if (diffuse_albedo)
+		glm_vec3_copy(diffuse_albedo, map->diffuse_albedo);
+	else
+		glm_vec3_one(map->diffuse_albedo);
+	
+	if (specular_albedo)
+		glm_vec3_copy(specular_albedo, map->specular_albedo);
+	else
+		glm_vec3_one(map->specular_albedo);
+	
+	if (emmision_albedo)
+		glm_vec3_copy(emmision_albedo, map->emmision_albedo);
+	else
+		glm_vec3_one(map->emmision_albedo);
+
+	return Q_SUCCESS;
+}
