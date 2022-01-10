@@ -51,6 +51,9 @@
     <ClCompile Include="src\shader\fill.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\player.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\main.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\shader\fill.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

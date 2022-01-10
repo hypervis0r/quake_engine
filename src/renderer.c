@@ -178,8 +178,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	QShaderPhongCreate(&mat, &map, 100.0f);
 
 	struct Q_MATERIAL light_mat = { 0 };
-	vec3 albedo = { 1., 1., 1. };
-	QShaderFillCreate(&light_mat, albedo);
+	vec3 light_cube_albedo = { 0., 1., 0. };
+	QShaderFillCreate(&light_mat, light_cube_albedo);
 
 	struct Q_MODELOBJECT main_model = { 0 };
 	QModelLoad(&main_model, "resources\\models\\cube.obj");
@@ -187,10 +187,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	struct Q_MODELOBJECT light_model = { 0 };
 	QModelLoad(&light_model, "resources\\models\\cube.obj");
 
-	vec3 cameraPos = { 0.0f, 0.0f,  3.0f };
-	vec3 cameraFront = { 0.0f, 0.0f, -1.0f };
-	vec3 cameraUp = { 0.0f, 1.0f, 0.0f };
-	QRenderInitializeCameraObject(&cam_obj, cameraPos, cameraFront, cameraUp, 90.f);
+	struct Q_PLAYEROBJECT player = { 0 };
+	QPlayerCreate(&player);
 	
 	QRenderInitializeFrameContext(&frame_ctx);
 
@@ -202,7 +200,7 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	*/
 	while (!glfwWindowShouldClose(window))
 	{
-		QInputProcess(window, &cam_obj, &frame_ctx);
+		QInputProcess(window, &player, &frame_ctx);
 
 		vec4 background_color = { 0.1, 0.1, 0.1, 1.0 };
 		QRenderClearScreen(background_color);
@@ -218,16 +216,14 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		float angle = 20.0f;
 
 		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
-		vec3 light_diffuse = { 1.f, 1.f, 1.f };
-		vec3 light_specular = { 1.0f, 1.0f, 1.0f };
 		struct Q_LIGHTOBJECT light_obj = { 0 };
-		QShaderCreateLight(&light_obj, light_ambient, light_diffuse, light_specular, light_pos);
+		QShaderCreateLight(&light_obj, light_ambient, light_cube_albedo, light_cube_albedo, light_pos);
 
-		mat.set_shader_light(&mat, &light_obj, &cam_obj);
+		mat.set_shader_light(&mat, &light_obj, player.cam);
 
-		QRenderModelObject(&main_model, &cam_obj, &mat, main_pos, NULL, rotation, angle * (glfwGetTime() * 0.5));
+		QRenderModelObject(&main_model, player.cam, &mat, main_pos, NULL, rotation, angle * (glfwGetTime() * 0.5));
 
-		QRenderModelObject(&light_model, &cam_obj, &light_mat, light_pos, scale, NULL, 0);
+		QRenderModelObject(&light_model, player.cam, &light_mat, light_pos, scale, NULL, 0);
 
 		QRenderUpdateFrameContext(&frame_ctx);
 

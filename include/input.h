@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "renderer.h"
+#include "player.h"
 
 struct Q_MOUSECONTEXT
 {
@@ -23,5 +24,5 @@ void QInputHandleMouseCallback(GLFWwindow* window, double xpos, double ypos);
 Q_STATUS QInputInitializeMouse(GLFWwindow* window, float sensitivity);
 
 Q_STATUS QInputProcessMouse(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, struct Q_FRAMECONTEXT* frame_ctx);
-Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, struct Q_FRAMECONTEXT* frame_ctx);
-Q_STATUS QInputProcess(GLFWwindow* window, struct Q_CAMERAOBJECT *cam, struct Q_FRAMECONTEXT *frame_ctx);
+Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx);
+Q_STATUS QInputProcess(GLFWwindow* window, struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx);

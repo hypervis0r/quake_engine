@@ -8,40 +8,38 @@ void QInputHandleMouseCallback(GLFWwindow* window, double xpos, double ypos)
 	g_mouse_ctx.ypos = ypos;
 }
 
-Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, struct Q_FRAMECONTEXT* frame_ctx)
+Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx)
 {
-	const float cameraSpeed = 2.5f * frame_ctx->delta_time; // adjust accordingly
+	vec3 movement_direction;
+	const float cameraSpeed = player->movement_speed * frame_ctx->delta_time; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		vec3 temp;
-		glm_vec3_scale(cam->front, cameraSpeed, temp);
-		glm_vec3_add(cam->pos, temp, cam->pos);
+		glm_vec3_scale(player->cam->front, cameraSpeed, movement_direction);
+		QPlayerMove(player, movement_direction);
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		vec3 temp;
-		glm_vec3_scale(cam->front, cameraSpeed, temp);
-		glm_vec3_sub(cam->pos, temp, cam->pos);
+		glm_vec3_scale(player->cam->front, cameraSpeed, movement_direction);
+		glm_vec3_negate(movement_direction);
+
+		QPlayerMove(player, movement_direction);
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		vec3 temp;
+		glm_cross(player->cam->front, player->cam->up, movement_direction);
+		glm_normalize(movement_direction);
+		glm_vec3_scale(movement_direction, cameraSpeed, movement_direction);
+		glm_vec3_negate(movement_direction);
 
-		glm_cross(cam->front, cam->up, temp);
-		glm_normalize(temp);
-		glm_vec3_scale(temp, cameraSpeed, temp);
-
-		glm_vec3_sub(cam->pos, temp, cam->pos);
+		QPlayerMove(player, movement_direction);
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		vec3 temp;
+		glm_cross(player->cam->front, player->cam->up, movement_direction);
+		glm_normalize(movement_direction);
+		glm_vec3_scale(movement_direction, cameraSpeed, movement_direction);
 
-		glm_cross(cam->front, cam->up, temp);
-		glm_normalize(temp);
-		glm_vec3_scale(temp, cameraSpeed, temp);
-
-		glm_vec3_add(cam->pos, temp, cam->pos);
+		QPlayerMove(player, movement_direction);
 	}
 
 	/*
@@ -58,7 +56,7 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, s
 	return Q_SUCCESS;
 }
 
-Q_STATUS QInputProcessMouse(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, struct Q_FRAMECONTEXT* frame_ctx)
+Q_STATUS QInputProcessMouse(GLFWwindow* window, struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx)
 {
 	float xoffset = g_mouse_ctx.xpos - g_mouse_ctx.last_xpos;
 	float yoffset = g_mouse_ctx.last_ypos - g_mouse_ctx.ypos;
@@ -68,21 +66,21 @@ Q_STATUS QInputProcessMouse(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, stru
 	xoffset *= g_mouse_ctx.sensitivity;
 	yoffset *= g_mouse_ctx.sensitivity;
 
-	cam->yaw += xoffset;
-	cam->pitch += yoffset;
+	player->cam->yaw += xoffset;
+	player->cam->pitch += yoffset;
 
-	if (cam->pitch > 89.0f)
-		cam->pitch = 89.0f;
-	if (cam->pitch < -89.0f)
-		cam->pitch = -89.0f;
+	if (player->cam->pitch > 89.0f)
+		player->cam->pitch = 89.0f;
+	if (player->cam->pitch < -89.0f)
+		player->cam->pitch = -89.0f;
 
 	vec3 direction;
-	direction[0] = cos(glm_rad(cam->yaw)) * cos(glm_rad(cam->pitch));
-	direction[1] = sin(glm_rad(cam->pitch));
-	direction[2] = sin(glm_rad(cam->yaw)) * cos(glm_rad(cam->pitch));
+	direction[0] = cos(glm_rad(player->cam->yaw)) * cos(glm_rad(player->cam->pitch));
+	direction[1] = sin(glm_rad(player->cam->pitch));
+	direction[2] = sin(glm_rad(player->cam->yaw)) * cos(glm_rad(player->cam->pitch));
 	glm_normalize(direction);
 
-	glm_vec3_copy(direction, cam->front);
+	glm_vec3_copy(direction, player->cam->front);
 
 	return Q_SUCCESS;
 }
@@ -106,13 +104,13 @@ Q_STATUS QInputInitializeMouse(GLFWwindow* window, float sensitivity)
 	return Q_SUCCESS;
 }
 
-Q_STATUS QInputProcess(GLFWwindow* window, struct Q_CAMERAOBJECT* cam, struct Q_FRAMECONTEXT* frame_ctx)
+Q_STATUS QInputProcess(GLFWwindow* window, struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx)
 {
 	if (!window)
 		return Q_ERROR;
 
-	QInputProcessMouse(window, cam, frame_ctx);
-	QInputProcessKeyboard(window, cam, frame_ctx);
+	QInputProcessMouse(window, player, frame_ctx);
+	QInputProcessKeyboard(window, player, frame_ctx);
 
 	return Q_SUCCESS;
 }
