@@ -50,14 +50,14 @@ struct Q_FRAMECONTEXT
 Q_STATUS QRenderMeshObject(
 	struct Q_MESHOBJECT* mesh,
 	struct Q_CAMERAOBJECT* cam,
-	struct Q_PHONGMATERIAL* mat,
+	struct Q_MATERIAL* mat,
 	vec3 world_pos,
 	vec3 scale,
 	vec3 rotation_axis, float angle);
 Q_STATUS QRenderModelObject(
 	struct Q_MODELOBJECT* model,
 	struct Q_CAMERAOBJECT* cam,
-	struct Q_PHONGMATERIAL* mat,
+	struct Q_MATERIAL* mat,
 	vec3 world_pos,
 	vec3 scale,
 	vec3 rot_axis, float rot_angle);

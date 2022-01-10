@@ -14,8 +14,8 @@ Q_STATUS QTextureCreate(GLuint* texture_id, const char* path)
 	*/
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	/*
 		Load image into buffer
@@ -42,7 +42,7 @@ Q_STATUS QTextureCreate(GLuint* texture_id, const char* path)
 	case 4: 
 		channel_type = GL_RGBA; break;
 	default: 
-		QLogWarn("Unsupported channel value in texture (%s)\n", path); return;
+		QLogWarn("Unsupported channel value in texture (%s)\n", path); return Q_IO_ERROR;
 	}
 
 	/*

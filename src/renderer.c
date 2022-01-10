@@ -150,6 +150,8 @@ Q_STATUS QRenderMeshObject(
 	QShaderSetUniformMat4(mat->shader_program_id, "model", model);
 
 	QRenderDrawMeshObject(mesh);
+
+	return Q_SUCCESS;
 }
 
 Q_STATUS QRenderLoop(GLFWwindow* window)
@@ -173,7 +175,7 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	QShaderFillCreate(&light_mat, albedo);
 
 	struct Q_MODELOBJECT main_model = { 0 };
-	QModelLoad(&main_model, "resources\\models\\skull.obj");
+	QModelLoad(&main_model, "resources\\models\\cube.obj");
 
 	struct Q_MODELOBJECT light_model = { 0 };
 	QModelLoad(&light_model, "resources\\models\\cube.obj");
