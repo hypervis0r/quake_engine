@@ -10,8 +10,7 @@ Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player)
 	vec3 cameraFront = { 0.0f, 0.0f, -1.0f };
 	vec3 cameraUp = { 0.0f, 1.0f, 0.0f };
 	QRenderInitializeCameraObject(player->cam, cameraPos, cameraFront, cameraUp, 90.f);
-
-	glm_vec3_copy(cameraPos, player->pos);
+	
 	glm_vec3_copy(cameraFront, player->front);
 	glm_vec3_copy(cameraUp, player->up);
 

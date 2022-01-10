@@ -17,7 +17,6 @@
 struct Q_PLAYEROBJECT
 {
 	struct Q_CAMERAOBJECT* cam;
-	vec3 pos;
 	vec3 front;
 	vec3 up;
 
