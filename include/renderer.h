@@ -58,9 +58,7 @@ Q_STATUS QRenderModelObject(
 	struct Q_MODELOBJECT* model,
 	struct Q_CAMERAOBJECT* cam,
 	struct Q_MATERIAL* mat,
-	vec3 world_pos,
-	vec3 scale,
-	versor rotation);
+	vec3 world_pos);
 
 Q_STATUS QRenderInitializeCameraObject(
 	struct Q_CAMERAOBJECT* cam,

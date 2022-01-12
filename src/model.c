@@ -215,6 +215,9 @@ Q_STATUS QModelLoad(struct Q_MODELOBJECT* model, const char* path)
 	model->meshes_count = 0;
 	model->meshes_size = scene->mNumMeshes * sizeof(*model->meshes);
 
+	glm_vec3_one(model->scale);
+	glm_quat_identity(model->rotation);
+
 	/*
 		TODO: Check for integer overflow
 	*/
@@ -247,6 +250,20 @@ Q_STATUS QModelFree(struct Q_MODELOBJECT* model)
 
 	free(model->meshes);
 	model->meshes = NULL;
+
+	return Q_SUCCESS;
+}
+
+Q_STATUS QModelScale(struct Q_MODELOBJECT* model, vec3 scale)
+{
+	glm_vec3_copy(scale, model->scale);
+
+	return Q_SUCCESS;
+}
+
+Q_STATUS QModelRotate(struct Q_MODELOBJECT* model, versor rotation)
+{
+	glm_quat_copy(rotation, model->rotation);
 
 	return Q_SUCCESS;
 }

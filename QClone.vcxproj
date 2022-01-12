@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\collision.c" />
     <ClCompile Include="src\input.c" />
     <ClCompile Include="src\log.c" />
     <ClCompile Include="src\main.c" />
@@ -101,6 +102,7 @@
     <ClCompile Include="src\window.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\collision.h" />
     <ClInclude Include="include\common.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\log.h" />

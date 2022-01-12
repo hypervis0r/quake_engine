@@ -46,6 +46,9 @@ struct Q_MODELOBJECT
 	struct Q_MESHOBJECT* meshes;
 	size_t meshes_size;
 	size_t meshes_count;
+
+	vec3 scale;
+	versor rotation;
 };
 
 Q_STATUS QMeshCreate(
@@ -57,3 +60,10 @@ Q_STATUS QMeshDelete(struct Q_MESHOBJECT* mesh);
 
 Q_STATUS QModelLoad(struct Q_MODELOBJECT *model, const char* path);
 Q_STATUS QModelFree(struct Q_MODELOBJECT* model);
+
+/*
+	These functions are essentially setter functions.
+	I made them because I like functional code readability.
+*/
+Q_STATUS QModelScale(struct Q_MODELOBJECT* model, vec3 scale);
+Q_STATUS QModelRotate(struct Q_MODELOBJECT* model, versor rotation);
