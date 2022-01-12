@@ -24,11 +24,12 @@ struct Q_PLAYEROBJECT
 	vec3 friction;
 	float movement_speed;
 	float gravity;
+	float jump_force;
 	Q_BOOL is_grounded;
 	double last_jump_tick;
 };
 
-Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player);
+Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, float movement_speed, float gravity, float jump_force);
 
 Q_STATUS QPlayerMove(struct Q_PLAYEROBJECT* player, vec3 direction);
 Q_STATUS QPlayerUpdateVelocity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx);

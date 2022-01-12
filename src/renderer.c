@@ -188,7 +188,7 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	QModelLoad(&light_model, "resources\\models\\cube.obj");
 
 	struct Q_PLAYEROBJECT player = { 0 };
-	QPlayerCreate(&player);
+	QPlayerCreate(&player, 3., 1., 0.30);
 	
 	QRenderInitializeFrameContext(&frame_ctx);
 
@@ -207,11 +207,12 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec4 background_color = { 0.1, 0.1, 0.1, 1.0 };
 		QRenderClearScreen(background_color);
 
-		float xpos = 2.0f * sin(glfwGetTime());
-		float zpos = 1.5f * cos(glfwGetTime());
+		float xpos = 3.0f * sin(glfwGetTime());
+		float zpos = 3.5f * cos(glfwGetTime());
+		float ypos = 3.0f * sin(glfwGetTime());
 
 		vec3 main_pos = { 0., 0., 0. };
-		vec3 light_pos = { xpos, 1.5, zpos };
+		vec3 light_pos = { xpos, ypos, zpos };
 
 		vec3 rotation = { 1.0f, 0.3f, 0.5f };
 		vec3 scale = { .1, .1, .1 };

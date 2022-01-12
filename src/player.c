@@ -1,6 +1,6 @@
 #include "player.h"
 
-Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player)
+Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, float movement_speed, float gravity, float jump_force)
 {
 	player->cam = malloc(sizeof(struct Q_CAMERAOBJECT));
 	if (!player->cam)
@@ -14,8 +14,9 @@ Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player)
 	glm_vec3_copy(cameraFront, player->front);
 	glm_vec3_copy(cameraUp, player->up);
 
-	player->movement_speed = 2.f;
-	player->gravity = 1.f;
+	player->movement_speed = movement_speed;
+	player->gravity = gravity;
+	player->jump_force = jump_force;
 	player->is_grounded = TRUE;
 	player->last_jump_tick = 0.;
 
@@ -58,7 +59,9 @@ Q_STATUS QPlayerUpdateVelocity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONT
 		player->cam->pos[1] = 0;
 
 	if (player->cam->pos[1] == 0)
+	{
 		player->is_grounded = TRUE;
+	}
 
 	return Q_SUCCESS;
 }

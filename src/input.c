@@ -48,7 +48,7 @@ Q_STATUS QInputProcessKeyboard(GLFWwindow* window, struct Q_PLAYEROBJECT* player
 	{
 		if (player->is_grounded && frame_ctx->last_frame_time - player->last_jump_tick > 0.25)
 		{
-			glm_vec3_scale(player->up, 0.25, movement_direction);
+			glm_vec3_scale(player->up, player->jump_force, movement_direction);
 			glm_vec3_add(player->velocity, movement_direction, player->velocity);
 
 			player->last_jump_tick = frame_ctx->last_frame_time;
