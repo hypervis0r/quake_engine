@@ -61,6 +61,7 @@ Q_STATUS QPlayerUpdateVelocity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONT
 	if (player->cam->pos[1] == 0)
 	{
 		player->is_grounded = TRUE;
+		player->velocity[1] = 0;
 	}
 
 	return Q_SUCCESS;
