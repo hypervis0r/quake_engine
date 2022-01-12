@@ -37,11 +37,11 @@ Q_STATUS QRenderModelObject(
 	struct Q_MATERIAL* mat,
 	vec3 world_pos, 
 	vec3 scale, 
-	vec3 rot_axis, float rot_angle)
+	versor rotation)
 {
 	for (size_t i = 0; i < model->meshes_count; i++)
 	{
-		QRenderMeshObject(&model->meshes[i], cam, mat, world_pos, scale, rot_axis, rot_angle);
+		QRenderMeshObject(&model->meshes[i], cam, mat, world_pos, scale, rotation);
 	}
 
 	return Q_SUCCESS;
@@ -130,7 +130,7 @@ Q_STATUS QRenderMeshObject(
 	struct Q_MATERIAL *mat,
 	vec3 world_pos,
 	vec3 scale,
-	vec3 rotation_axis, float angle)
+	versor rotation)
 {
 	mat4 projection, view, model, normal_matrix;
 
@@ -143,8 +143,8 @@ Q_STATUS QRenderMeshObject(
 	if (scale)
 		glm_scale(model, scale);
 	
-	if (rotation_axis)
-		glm_rotate(model, glm_rad(angle), rotation_axis);
+	if (rotation)
+		glm_quat_rotate(model, rotation, model);
 
 	glm_mat4_inv(model, normal_matrix);
 	glm_mat4_transpose(normal_matrix);
@@ -215,8 +215,11 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		vec3 light_pos = { xpos, ypos, zpos };
 
 		vec3 rotation = { 1.0f, 0.3f, 0.5f };
+		versor rot;
 		vec3 scale = { .1, .1, .1 };
 		float angle = 20.0f;
+
+		glm_quatv(rot, glm_rad(angle * (glfwGetTime() * 0.5)), rotation);
 
 		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
 		struct Q_LIGHTOBJECT light_obj = { 0 };
@@ -224,9 +227,9 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 
 		mat.set_shader_light(&mat, &light_obj, player.cam);
 
-		QRenderModelObject(&main_model, player.cam, &mat, main_pos, NULL, rotation, angle * (glfwGetTime() * 0.5));
+		QRenderModelObject(&main_model, player.cam, &mat, main_pos, NULL, rot);
 
-		QRenderModelObject(&light_model, player.cam, &light_mat, light_pos, scale, NULL, 0);
+		QRenderModelObject(&light_model, player.cam, &light_mat, light_pos, scale, NULL);
 
 		QRenderUpdateFrameContext(&frame_ctx);
 
