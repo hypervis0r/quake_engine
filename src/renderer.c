@@ -45,6 +45,14 @@ Q_STATUS QRenderModelObject(
 	return Q_SUCCESS;
 }
 
+Q_STATUS QRenderObject(
+	struct Q_OBJECT* object,
+	struct Q_CAMERAOBJECT* cam)
+{
+	// TODO: Check for object validity
+	return QRenderModelObject(object->model, cam, object->mat, object->pos);
+}
+
 Q_STATUS QRenderInitializeCameraObject(
 	struct Q_CAMERAOBJECT* cam, 
 	vec3 pos, vec3 front, vec3 up,
@@ -185,6 +193,12 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	struct Q_MODELOBJECT light_model = { 0 };
 	QModelLoad(&light_model, "resources\\models\\cube.obj");
 
+	struct Q_OBJECT main_object = { 0 };
+	QObjectCreate(&main_object, &main_model, &mat, NULL);
+
+	struct Q_OBJECT light_object = { 0 };
+	QObjectCreate(&light_object, &light_model, &light_mat, NULL);
+
 	struct Q_PLAYEROBJECT player = { 0 };
 	QPlayerCreate(&player, 3., 1., 0.30);
 	
@@ -217,20 +231,22 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		float angle = 20.0f;
 
 		glm_quatv(rot, glm_rad(angle * (glfwGetTime() * 0.5)), rotation);
-		QModelRotate(&main_model, rot);
+		QModelRotate(main_object.model, rot);
 
 		vec3 scale = { .1, .1, .1 };
-		QModelScale(&light_model, scale);
+		QModelScale(light_object.model, scale);
 
 		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
 		struct Q_LIGHTOBJECT light_obj = { 0 };
 		QShaderCreateLight(&light_obj, light_ambient, light_cube_albedo, light_cube_albedo, light_pos);
 
-		mat.set_shader_light(&mat, &light_obj, player.cam);
+		main_object.mat->set_shader_light(&mat, &light_obj, player.cam);
 
-		QRenderModelObject(&main_model, player.cam, &mat, main_pos);
+		QObjectSetWorldPosition(&light_object, light_pos);
 
-		QRenderModelObject(&light_model, player.cam, &light_mat, light_pos);
+		QRenderObject(&main_object, player.cam);
+
+		QRenderObject(&light_object, player.cam);
 
 		QRenderUpdateFrameContext(&frame_ctx);
 

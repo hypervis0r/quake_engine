@@ -13,11 +13,6 @@
 #include "texture.h"
 #include "model.h"
 #include "renderer.h"
+#include "object.h"
 
-struct Q_AABB
-{
-	vec3 min_pos;
-	vec3 max_pos;
-};
-
-Q_BOOL QAABBIsColliding(struct Q_AABB *a, struct Q_AABB* b);
+Q_BOOL QAABBIsColliding(struct Q_OBJECT *a, struct Q_OBJECT* b);

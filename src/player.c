@@ -2,7 +2,7 @@
 
 Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, float movement_speed, float gravity, float jump_force)
 {
-	player->cam = malloc(sizeof(struct Q_CAMERAOBJECT));
+	player->cam = malloc(sizeof(*player->cam));
 	if (!player->cam)
 		return Q_OUT_OF_MEMORY;
 
@@ -10,9 +10,18 @@ Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, float movement_speed, floa
 	vec3 cameraFront = { 0.0f, 0.0f, -1.0f };
 	vec3 cameraUp = { 0.0f, 1.0f, 0.0f };
 	QRenderInitializeCameraObject(player->cam, cameraPos, cameraFront, cameraUp, 90.f);
-	
-	glm_vec3_copy(cameraFront, player->front);
-	glm_vec3_copy(cameraUp, player->up);
+
+	player->object = malloc(sizeof(*player->object));
+	if (!player->object)
+	{
+		free(player->cam);
+		player->cam = NULL;
+
+		return Q_OUT_OF_MEMORY;
+	}
+
+	vec3 box_collider = { 1., 1., 1. };
+	QObjectCreate(player->object, NULL, NULL, box_collider);
 
 	player->movement_speed = movement_speed;
 	player->gravity = gravity;

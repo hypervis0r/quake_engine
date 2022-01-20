@@ -63,6 +63,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)lib\include</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,6 +93,7 @@
     <ClCompile Include="src\log.c" />
     <ClCompile Include="src\main.c" />
     <ClCompile Include="src\model.c" />
+    <ClCompile Include="src\object.c" />
     <ClCompile Include="src\player.c" />
     <ClCompile Include="src\renderer.c" />
     <ClCompile Include="src\shader\fill.c" />
@@ -108,6 +110,7 @@
     <ClInclude Include="include\log.h" />
     <ClInclude Include="include\main.h" />
     <ClInclude Include="include\model.h" />
+    <ClInclude Include="include\object.h" />
     <ClInclude Include="include\player.h" />
     <ClInclude Include="include\renderer.h" />
     <ClInclude Include="include\shader\fill.h" />

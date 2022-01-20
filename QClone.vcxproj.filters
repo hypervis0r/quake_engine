@@ -57,6 +57,9 @@
     <ClCompile Include="src\collision.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\object.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\main.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\collision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

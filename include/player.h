@@ -13,12 +13,12 @@
 #include "texture.h"
 #include "model.h"
 #include "renderer.h"
+#include "collision.h"
 
 struct Q_PLAYEROBJECT
 {
 	struct Q_CAMERAOBJECT* cam;
-	vec3 front;
-	vec3 up;
+	struct Q_OBJECT* object;
 
 	vec3 velocity;
 	vec3 friction;

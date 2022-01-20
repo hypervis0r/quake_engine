@@ -1,6 +1,6 @@
 #include "collision.h"
 
-Q_BOOL QAABBIsColliding(struct Q_AABB* a, struct Q_AABB* b)
+Q_BOOL QAABBIsColliding(struct Q_OBJECT* a, struct Q_OBJECT* b)
 {
 	/*
 		TODO: this is going to break in the future.
@@ -11,5 +11,12 @@ Q_BOOL QAABBIsColliding(struct Q_AABB* a, struct Q_AABB* b)
 		if a variable ever gets put before the two members, you're
 		going to have a bad time debugging.
 	*/
-	return glm_aabb_contains(a, b);
+
+	vec3 a_aabb[2];
+	vec3 b_aabb[2];
+
+	glm_vec3_add(a->pos, a->box_collider, a_aabb[1]);
+	glm_vec3_add(b->pos, b->box_collider, b_aabb[1]);
+
+	return glm_aabb_contains(a_aabb, b_aabb);
 }
