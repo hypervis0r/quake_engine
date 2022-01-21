@@ -39,9 +39,7 @@ Q_STATUS QShaderFillCreate(struct Q_MATERIAL* this, vec3 color)
 		return Q_OUT_OF_MEMORY;
 	}
 
-	struct Q_FILLMATERIAL* mat = this->material_data;
-
-	glm_vec3_copy(color, mat->color);
+	QShaderFillSetColor(this, color);
 
 	return Q_SUCCESS;
 }
@@ -51,6 +49,15 @@ Q_STATUS QShaderFillFree(struct Q_MATERIAL* mat)
 	glDeleteProgram(mat->shader_program_id);
 
 	free(mat->material_data);
+
+	return Q_SUCCESS;
+}
+
+Q_STATUS QShaderFillSetColor(struct Q_MATERIAL* this, vec3 color)
+{
+	struct Q_FILLMATERIAL* mat = this->material_data;
+
+	glm_vec3_copy(color, mat->color);
 
 	return Q_SUCCESS;
 }

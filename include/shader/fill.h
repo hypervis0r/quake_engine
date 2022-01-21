@@ -19,4 +19,5 @@ struct Q_FILLMATERIAL
 
 Q_STATUS QShaderFillApplyUniforms(struct Q_MATERIAL* this);
 Q_STATUS QShaderFillCreate(struct Q_MATERIAL* this, vec3 color);
-Q_STATUS QShaderPhongFree(struct Q_MATERIAL* mat);
+Q_STATUS QShaderFillFree(struct Q_MATERIAL* mat);
+Q_STATUS QShaderFillSetColor(struct Q_MATERIAL* this, vec3 color);

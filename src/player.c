@@ -6,7 +6,7 @@ Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, float movement_speed, floa
 	if (!player->cam)
 		return Q_OUT_OF_MEMORY;
 
-	vec3 cameraPos = { 0.0f, 0.0f,  3.0f };
+	vec3 cameraPos = { 0.0f, 0.0f,  0.0f };
 	vec3 cameraFront = { 0.0f, 0.0f, -1.0f };
 	vec3 cameraUp = { 0.0f, 1.0f, 0.0f };
 	QRenderInitializeCameraObject(player->cam, cameraPos, cameraFront, cameraUp, 90.f);
@@ -48,6 +48,7 @@ Q_STATUS QPlayerFree(struct Q_PLAYEROBJECT* player)
 Q_STATUS QPlayerMove(struct Q_PLAYEROBJECT* player, vec3 direction)
 {
 	glm_vec3_add(player->cam->pos, direction, player->cam->pos);
+	glm_vec3_add(player->object->pos, direction, player->object->pos);
 
 	if (player->cam->pos[1] > 0.)
 		player->is_grounded = FALSE;
@@ -65,7 +66,10 @@ Q_STATUS QPlayerUpdateVelocity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONT
 	QPlayerMove(player, player->velocity);
 
 	if (player->cam->pos[1] < 0)
+	{
 		player->cam->pos[1] = 0;
+		player->object->pos[1] = 0;
+	}
 
 	if (player->cam->pos[1] == 0)
 	{

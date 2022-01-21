@@ -194,7 +194,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	QModelLoad(&light_model, "resources\\models\\cube.obj");
 
 	struct Q_OBJECT main_object = { 0 };
-	QObjectCreate(&main_object, &main_model, &mat, NULL);
+	vec3 box_collider = { 1., 1., 1. };
+	QObjectCreate(&main_object, &main_model, &mat, box_collider);
 
 	struct Q_OBJECT light_object = { 0 };
 	QObjectCreate(&light_object, &light_model, &light_mat, NULL);
@@ -231,17 +232,31 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		float angle = 20.0f;
 
 		glm_quatv(rot, glm_rad(angle * (glfwGetTime() * 0.5)), rotation);
-		QModelRotate(main_object.model, rot);
+		//QModelRotate(main_object.model, rot);
 
 		vec3 scale = { .1, .1, .1 };
 		QModelScale(light_object.model, scale);
 
+		vec3 light_albedo;
+
+		if (QAABBIsColliding(player.object, &main_object))
+		{
+			glm_vec3_one(light_albedo);
+		}
+		else
+		{
+			glm_vec3_copy(light_cube_albedo, light_albedo);
+		}
+
+		QShaderFillSetColor(light_object.mat, light_albedo);
+
 		vec3 light_ambient = { 0.2f, 0.2f, 0.2f };
 		struct Q_LIGHTOBJECT light_obj = { 0 };
-		QShaderCreateLight(&light_obj, light_ambient, light_cube_albedo, light_cube_albedo, light_pos);
+		QShaderCreateLight(&light_obj, light_ambient, light_albedo, light_albedo, light_pos);
 
 		main_object.mat->set_shader_light(&mat, &light_obj, player.cam);
 
+		QObjectSetWorldPosition(&main_object, main_pos);
 		QObjectSetWorldPosition(&light_object, light_pos);
 
 		QRenderObject(&main_object, player.cam);
@@ -249,6 +264,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 		QRenderObject(&light_object, player.cam);
 
 		QRenderUpdateFrameContext(&frame_ctx);
+
+		printf("{ %f, %f, %f }\n", player.object->pos[0], player.object->pos[1], player.object->pos[2]);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
