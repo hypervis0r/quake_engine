@@ -201,7 +201,8 @@ Q_STATUS QRenderLoop(GLFWwindow* window)
 	QObjectCreate(&light_object, &light_model, &light_mat, NULL);
 
 	struct Q_PLAYEROBJECT player = { 0 };
-	QPlayerCreate(&player, 3., 1., 0.30);
+	vec3 player_start_pos = { 0., 0., 0. };
+	QPlayerCreate(&player, player_start_pos, 3., 1., 0.30);
 	
 	QRenderInitializeFrameContext(&frame_ctx);
 

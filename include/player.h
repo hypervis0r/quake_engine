@@ -29,7 +29,7 @@ struct Q_PLAYEROBJECT
 	double last_jump_tick;
 };
 
-Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, float movement_speed, float gravity, float jump_force);
+Q_STATUS QPlayerCreate(struct Q_PLAYEROBJECT* player, vec3 start_pos, float movement_speed, float gravity, float jump_force);
 
 Q_STATUS QPlayerMove(struct Q_PLAYEROBJECT* player, vec3 direction);
 Q_STATUS QPlayerUpdateVelocity(struct Q_PLAYEROBJECT* player, struct Q_FRAMECONTEXT* frame_ctx);
